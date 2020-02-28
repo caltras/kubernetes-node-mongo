@@ -1,0 +1,59 @@
+# Default values for test-env.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+api:
+  fullname: api-deployment-test
+  name: api-deployment-test
+  replicaCount: 2
+  labels: node
+  matchLabels:
+    app: node
+
+  image:
+    name: api-v1-test
+    repository: api-node:v3
+    pullPolicy: Never
+    containerPort: 3000
+    env:
+      database:
+      - name: DATABASE
+        value: mongo-pod
+
+  service:
+    name: api-service-test
+    selector: 
+      app: node
+    type: NodePort
+    port: 3000
+    targetPort: 3000
+    nodePort: 31100
+    protocol: TCP
+
+    hosts:
+      - host: api-test.local
+mongo:
+  replicaCount: 1
+  fullname: mongo-deployment-test
+  name: mongo-deployment-test
+  matchLabels:
+    app: mongo-test
+  image:
+    name: mongo-test
+    repository: mongo
+    containerPort: 27017
+  service:
+    name: mongo-service-test
+    type: NodePort
+    selector:
+      app: mongo-test
+    protocol: TCP
+    type: NodePort
+    port: 27017
+    targetPort: 27017
+    nodePort: 32100
+
+    hosts:
+      - host: mongo-test.local
+      
+
+

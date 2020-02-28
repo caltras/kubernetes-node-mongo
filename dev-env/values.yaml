@@ -1,0 +1,59 @@
+# Default values for dev-env.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+api:
+  fullname: api-deployment-dev
+  name: api-deployment-dev
+  replicaCount: 2
+  labels: node
+  matchLabels:
+    app: node
+
+  image:
+    name: api-v1-development
+    repository: api-node:v3
+    pullPolicy: Never
+    containerPort: 3000
+    env:
+      database:
+      - name: DATABASE
+        value: mongo-pod
+
+  service:
+    name: api-service-development
+    selector: 
+      app: node
+    type: NodePort
+    port: 3000
+    targetPort: 3000
+    nodePort: 31000
+    protocol: TCP
+
+    hosts:
+      - host: api-development.local
+mongo:
+  replicaCount: 1
+  fullname: mongo-deployment-dev
+  name: mongo-deployment-dev
+  matchLabels:
+    app: mongo-dev
+  image:
+    name: mongo-dev
+    repository: mongo
+    containerPort: 27017
+  service:
+    name: mongo-service-development
+    type: NodePort
+    selector:
+      app: mongo-dev
+    protocol: TCP
+    type: NodePort
+    port: 27017
+    targetPort: 27017
+    nodePort: 32000
+
+    hosts:
+      - host: mongo-development.local
+      
+
+
